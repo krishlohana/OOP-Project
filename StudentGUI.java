@@ -20,24 +20,25 @@ public class StudentGUI {
         JButton viewStudentsBtn = new JButton("View All Students");
         JButton addCourseBtn = new JButton("Add Course to Student");
         JButton transcriptBtn = new JButton("Generate Transcript");
+        JButton deleteStudentBtn = new JButton("Delete Student");
         JButton saveBtn = new JButton("Save to File");
         JButton loadBtn = new JButton("Load from File");
         JButton exitBtn = new JButton("Exit");
 
-        // Add all buttons
         panel.add(addStudentBtn);
         panel.add(viewStudentsBtn);
         panel.add(addCourseBtn);
         panel.add(transcriptBtn);
+        panel.add(deleteStudentBtn);
         panel.add(saveBtn);
         panel.add(loadBtn);
         panel.add(exitBtn);
 
-        // Add listeners
         addStudentBtn.addActionListener(e -> addStudent());
         viewStudentsBtn.addActionListener(e -> viewStudents());
         addCourseBtn.addActionListener(e -> addCourse());
         transcriptBtn.addActionListener(e -> generateTranscript());
+        deleteStudentBtn.addActionListener(e -> deleteStudent());
         saveBtn.addActionListener(e -> sms.saveToFile("students.txt"));
         loadBtn.addActionListener(e -> sms.loadFromFile("students.txt"));
         exitBtn.addActionListener(e -> System.exit(0));
@@ -46,7 +47,6 @@ public class StudentGUI {
         frame.setVisible(true);
     }
 
-    // Function to add student using input dialogs
     private void addStudent() {
         String id = JOptionPane.showInputDialog("Enter Student ID:");
         String name = JOptionPane.showInputDialog("Enter Student Name:");
@@ -54,16 +54,12 @@ public class StudentGUI {
         sms.addStudent(id, name, attendance);
     }
 
-    // Function to view students in a dialog
     private void viewStudents() {
         StringBuilder info = new StringBuilder();
-        for (Student s : sms.getStudents()) {
-            info.append(s).append("\n");
-        }
+        for (Student s : sms.getStudents()) info.append(s).append("\n");
         JOptionPane.showMessageDialog(null, info.toString(), "All Students", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Function to add a course to a student
     private void addCourse() {
         String id = JOptionPane.showInputDialog("Enter Student ID:");
         String courseName = JOptionPane.showInputDialog("Enter Course Name:");
@@ -72,7 +68,6 @@ public class StudentGUI {
         sms.addCourseToStudent(id, courseName, creditHours, grade);
     }
 
-    // Function to generate transcript
     private void generateTranscript() {
         String id = JOptionPane.showInputDialog("Enter Student ID:");
         Student s = sms.findStudentById(id);
@@ -83,8 +78,12 @@ public class StudentGUI {
             JOptionPane.showMessageDialog(null, "Student not found.");
         }
     }
+    private void deleteStudent() {
+        String id = JOptionPane.showInputDialog("Enter Student ID to delete:");
+        sms.deleteStudent(id);
+        JOptionPane.showMessageDialog(null, "If the ID was found, student was deleted.");
+    }
 
-    // Main method to run GUI
     public static void main(String[] args) {
         new StudentGUI();
     }
