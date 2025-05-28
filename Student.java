@@ -4,26 +4,19 @@ public class Student {
     private String studentId;
     private String name;
     private double attendance;
-    private ArrayList<Double> grades;
+    private ArrayList<Course> courses;
 
-    // Constructor
     public Student(String studentId, String name, double attendance) {
         this.studentId = studentId;
         this.name = name;
         this.attendance = attendance;
-        this.grades = new ArrayList<>();
+        this.courses = new ArrayList<>();
     }
 
-    // Add a grade
-    public void addGrade(double grade) {
-        if (grade >= 0.0 && grade <= 4.0) {
-            grades.add(grade);
-        } else {
-            System.out.println("Invalid grade! Must be between 0.0 and 4.0.");
-        }
+    public void addCourse(Course course) {
+        courses.add(course);
     }
 
-    // Update attendance
     public void updateAttendance(double newAttendance) {
         if (newAttendance >= 0 && newAttendance <= 100) {
             this.attendance = newAttendance;
@@ -32,36 +25,23 @@ public class Student {
         }
     }
 
-    // Calculate GPA
     public double calculateGPA() {
-        if (grades.isEmpty()) return 0.0;
-        double total = 0.0;
-        for (double g : grades) {
-            total += g;
+        if (courses.isEmpty()) return 0.0;
+        double totalPoints = 0.0;
+        int totalCredits = 0;
+        for (Course c : courses) {
+            totalPoints += c.getGrade() * c.getCreditHours();
+            totalCredits += c.getCreditHours();
         }
-        return total / grades.size();
+        return totalCredits == 0 ? 0.0 : totalPoints / totalCredits;
     }
 
-    // Getters
-    public String getStudentId() {
-        return studentId;
-    }
+    public String getStudentId() { return studentId; }
+    public String getName() { return name; }
+    public double getAttendance() { return attendance; }
+    public ArrayList<Course> getCourses() { return courses; }
 
-    public String getName() {
-        return name;
-    }
-
-    public double getAttendance() {
-        return attendance;
-    }
-
-    public ArrayList<Double> getGrades() {
-        return grades;
-    }
-
-    // To display student info
     public String toString() {
-        return "ID: " + studentId + ", Name: " + name +
-               ", Attendance: " + attendance + "%, GPA: " + String.format("%.2f", calculateGPA());
+        return "ID: " + studentId + ", Name: " + name + ", Attendance: " + attendance + "%, GPA: " + String.format("%.2f", calculateGPA());
     }
 }
